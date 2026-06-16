@@ -1,7 +1,9 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import SerperDevTool
+
+import os
 
 search_tool = SerperDevTool()
 @CrewBase
@@ -16,7 +18,11 @@ class BasicCrewai():
         return Agent(
             config=self.agents_config['investigator'], # type: ignore[index]
             verbose=True,
-            tools = [search_tool]
+            tools = [search_tool],
+            llm = LLM(model=os.environ.get("OPENAI_MODEL_NAME"),
+                      api_key=os.environ.get("OPENAI_API_KEY"),
+                      base_url=os.environ.get("OPENAI_BASE_URL"),
+            )
         )
 
     @agent
@@ -30,7 +36,11 @@ class BasicCrewai():
     def copywriter(self) -> Agent:
         return Agent(
             config=self.agents_config['copywriter'], # type: ignore[index]
-            verbose=True
+            verbose=True,
+            llm = LLM(model=os.environ.get("ANTHROPIC_MODEL_NAME"),
+                      api_key=os.environ.get("OPENAI_API_KEY"),
+                      base_url=os.environ.get("OPENAI_BASE_URL"),
+            )
         )
 
     @task
