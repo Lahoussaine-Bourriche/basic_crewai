@@ -14,7 +14,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        'target_company': 'A fictitious or real local real estate agency (e.g., Century 21 Toulouse)',
+        'target_company': 'Deeper Pulse ( Toulouse)',
     }
 
     try:
@@ -22,7 +22,7 @@ def run():
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
-
+run()
 def train():
     """
     Train the crew for a given number of iterations.

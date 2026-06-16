@@ -19,17 +19,18 @@ class BasicCrewai():
             config=self.agents_config['investigator'], # type: ignore[index]
             verbose=True,
             tools = [search_tool],
-            llm = LLM(model=os.environ.get("OPENAI_MODEL_NAME"),
-                      api_key=os.environ.get("OPENAI_API_KEY"),
-                      base_url=os.environ.get("OPENAI_BASE_URL"),
-            )
+            max_iter=3
+
         )
 
     @agent
     def analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['analyst'], # type: ignore[index]
-            verbose=True
+            verbose=True,
+            max_iter=3
+
+        
         )
 
     @agent
@@ -37,10 +38,8 @@ class BasicCrewai():
         return Agent(
             config=self.agents_config['copywriter'], # type: ignore[index]
             verbose=True,
-            llm = LLM(model=os.environ.get("ANTHROPIC_MODEL_NAME"),
-                      api_key=os.environ.get("OPENAI_API_KEY"),
-                      base_url=os.environ.get("OPENAI_BASE_URL"),
-            )
+            max_iter=3
+        
         )
 
     @task
@@ -59,7 +58,9 @@ class BasicCrewai():
     def email_task(self) -> Task:
         return Task(
             config=self.tasks_config['email_task'], # type: ignore[index]
-            output_file='report.md'
+            output_file='report.md',
+            human_input=True
+            
         )
 
     @crew
@@ -69,5 +70,5 @@ class BasicCrewai():
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,
-            verbose=True,
-        )
+            verbose=True
+            )
